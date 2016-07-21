@@ -49,4 +49,4 @@ $app->group('/admin', function () {
 
     })->add( new Middleware\RoleAccess($this->getContainer(), [ User::ROLE_ADMIN ]) );
 
-})->add( new Middleware\Slim\Modules\Auth( $container['auth'] ) );
+})->add( new Middleware\Auth( $container['auth'] ) );

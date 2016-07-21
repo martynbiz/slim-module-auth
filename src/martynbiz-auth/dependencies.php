@@ -11,5 +11,5 @@ $container['auth.model.user'] = function ($c) {
 $container['auth'] = function ($c) {
     $settings = $c->get('settings')['auth'];
     $authAdapter = new MartynBiz\Slim\Modules\Auth\Adapter\Mongo( $c['auth.model.user'] );
-    return new MartynBiz\Auth\Auth($authAdapter, $settings);
+    return new MartynBiz\Slim\Modules\Auth\Auth($authAdapter, $settings);
 };

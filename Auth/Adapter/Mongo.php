@@ -4,7 +4,7 @@ namespace MartynBiz\Slim\Modules\Auth\Adapter;
 // use Zend\Authentication\Adapter\AdapterInterface;
 // use Zend\Authentication\Result;
 
-use MartynBiz\Auth\Model\User;
+use MartynBiz\Slim\Modules\Auth\Model\User;
 
 class Mongo implements AdapterInterface
 {
