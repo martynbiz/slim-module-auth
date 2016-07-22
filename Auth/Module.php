@@ -1,5 +1,5 @@
 <?php
-namespace MartynBiz\Slim\Modules\Core;
+namespace MartynBiz\Slim\Modules\Auth;
 
 use Slim\App;
 use Slim\Container;
@@ -7,8 +7,9 @@ use Slim\Http\Headers;
 use MartynBiz\Mongo\Connection;
 use MartynBiz\Slim\Modules\Core\Http\Request;
 use MartynBiz\Slim\Modules\Core\Http\Response;
+use MartynBiz\Slim\Module\ModuleInterface;
 
-class Module
+class Module implements ModuleInterface
 {
     /**
      * Get config array for this module
@@ -20,13 +21,13 @@ class Module
 
         // Models
         $container['auth.model.user'] = function ($c) {
-            return new MartynBiz\Slim\Modules\Auth\Model\User();
+            return new \MartynBiz\Slim\Modules\Auth\Model\User();
         };
 
         $container['auth'] = function ($c) {
             $settings = $c->get('settings')['auth'];
-            $authAdapter = new MartynBiz\Slim\Modules\Auth\Adapter\Mongo( $c['auth.model.user'] );
-            return new MartynBiz\Slim\Modules\Auth\Auth($authAdapter, $settings);
+            $authAdapter = new \MartynBiz\Slim\Modules\Auth\Adapter\Mongo( $c['auth.model.user'] );
+            return new \MartynBiz\Slim\Modules\Auth\Auth($authAdapter, $settings);
         };
     }
 
@@ -91,8 +92,8 @@ class Module
                 $this->delete('/{id:[0-9]+}',
                     '\MartynBiz\Slim\Modules\Auth\Controller\Admin\UsersController:delete')->setName('admin_users_delete');
 
-            })->add( new Middleware\RoleAccess($this->getContainer(), [ User::ROLE_ADMIN ]) );
+            })->add( new \MartynBiz\Slim\Modules\Auth\Middleware\RoleAccess($this->getContainer(), [ \MartynBiz\Slim\Modules\Auth\Model\User::ROLE_ADMIN ]) );
 
-        })->add( new Middleware\Auth( $container['auth'] ) );
+        })->add( new \MartynBiz\Slim\Modules\Auth\Middleware\Auth( $container['auth'] ) );
     }
 }

@@ -26,7 +26,7 @@
     },
     "require": {
         "php": ">=5.3.0",
-        "martynbiz/slim-module-auth": "dev-master"
+        "martynbiz/slim-module-auth": "dev-feature-module-class"
     },
     "require-dev": {
         "phpunit/phpunit": "4.8.*"

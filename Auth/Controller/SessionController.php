@@ -183,10 +183,10 @@ class SessionController extends BaseController
         } else {
 
             // forward them to the login page with errors to try again
-            $this->get('flash')->addMessage('errors', array(
+            $container->get('flash')->addMessage('errors', array(
                 'Invalid username or password',
             ));
-            return $this->forward('index');
+            return $this->forward('index', $request, $response, $args);
 
         }
     }
