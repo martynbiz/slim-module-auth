@@ -1,5 +1,5 @@
 <?php
-namespace MartynBiz\Slim\Modules\Auth\Model;
+namespace MartynBiz\Slim\Module\Auth\Model;
 
 use MartynBiz\Slim\Module\Core\Model\Base;
 
