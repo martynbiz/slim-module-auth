@@ -220,7 +220,7 @@ class SessionController extends BaseController
     // /**
     //  * POST /session/facebook
     //  */
-    // public function facebook()
+    // public function facebook($request, $response, $args)
     // {
     //     // combine GET and POST params
     //     $params = array_merge($this->getQueryParams(), $this->getPost());
@@ -285,7 +285,7 @@ class SessionController extends BaseController
     //
     //         // When Graph returns an error
     //         $this->get('flash')->addMessage('errors', array($errorMsg));
-    //         return $this->forward('index');
+    //         return $this->forward('index', $request, $response, $args);
     //
     //     }
     //

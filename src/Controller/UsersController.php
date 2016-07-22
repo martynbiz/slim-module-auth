@@ -6,7 +6,7 @@ use MartynBiz\Slim\Module\Auth\Model\User;
 
 class UsersController extends BaseController
 {
-    public function index()
+    public function index($request, $response, $args)
     {
         $users = $this->get('auth.model.user')->find();
 
@@ -18,7 +18,7 @@ class UsersController extends BaseController
     /**
      * Upon creation too, the user will be redirect here to edit the user
      */
-    public function edit($id)
+    public function edit($request, $response, $args)
     {
         $user = $this->get('auth.model.user')->findOneOrFail([
             'id' => (int) $id,
@@ -36,7 +36,7 @@ class UsersController extends BaseController
      * or 2) redirect back to the edit page (upon which they can then submit when they
      * choose to)
      */
-    public function update($id)
+    public function update($request, $response, $args)
     {
         $user = $this->get('auth.model.user')->findOneOrFail([
             'id' => (int) $id,
@@ -53,13 +53,11 @@ class UsersController extends BaseController
             return $this->redirect('/admin/users');
         } else {
             $this->get('flash')->addMessage('errors', $user->getErrors());
-            return $this->forward('edit', array(
-                'id' => $id,
-            ));
+            return $this->forward('edit', $request, $response, $args);
         }
     }
 
-    public function delete($id)
+    public function delete($request, $response, $args)
     {
         $user = $this->get('auth.model.user')->findOneOrFail(array(
             'id' => (int) $id,
