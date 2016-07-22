@@ -1,14 +1,6 @@
 <?php
 return [
     'settings' => [
-
-        // Renderer settings
-        'renderer' => [
-            'folders' => [
-                APPLICATION_PATH . '/src/martynbiz-auth/templates',
-            ],
-        ],
-
         'auth' => [
 
             // this is the session namespace. apps that want to authenticate
