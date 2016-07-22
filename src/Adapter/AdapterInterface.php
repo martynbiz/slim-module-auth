@@ -1,5 +1,5 @@
 <?php
-namespace MartynBiz\Slim\Modules\Auth\Adapter;
+namespace MartynBiz\Slim\Module\Auth\Adapter;
 
 interface AdapterInterface
 {
