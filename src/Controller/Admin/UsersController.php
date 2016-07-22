@@ -1,8 +1,8 @@
 <?php
-namespace MartynBiz\Slim\Modules\Auth\Controller\Admin;
+namespace MartynBiz\Slim\Module\Auth\Controller\Admin;
 
-use MartynBiz\Slim\Modules\Auth\Controller\BaseController;
-use MartynBiz\Slim\Modules\Auth\Model\User;
+use MartynBiz\Slim\Module\Auth\Controller\BaseController;
+use MartynBiz\Slim\Module\Auth\Model\User;
 
 class UsersController extends BaseController
 {

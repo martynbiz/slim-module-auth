@@ -1,7 +1,7 @@
 <?php
-namespace MartynBiz\Slim\Modules\Auth\Middleware;
+namespace MartynBiz\Slim\Module\Auth\Middleware;
 
-use MartynBiz\Slim\Modules\Auth\Auth as AuthService;
+use MartynBiz\Slim\Module\Auth\Auth as AuthService;
 
 class Auth
 {

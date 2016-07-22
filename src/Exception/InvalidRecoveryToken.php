@@ -1,5 +1,5 @@
 <?php
-namespace MartynBiz\Slim\Modules\Auth\Exception;
+namespace MartynBiz\Slim\Module\Auth\Exception;
 
 class InvalidRecoveryToken extends \Exception
 {

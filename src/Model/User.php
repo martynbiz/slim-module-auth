@@ -1,7 +1,7 @@
 <?php
 namespace MartynBiz\Slim\Modules\Auth\Model;
 
-use MartynBiz\Slim\Modules\Core\Model\Base;
+use MartynBiz\Slim\Module\Core\Model\Base;
 
 /**
  *

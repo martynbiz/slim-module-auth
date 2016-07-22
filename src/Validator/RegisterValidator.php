@@ -1,8 +1,8 @@
 <?php
-namespace MartynBiz\Slim\Modules\Auth\Validator;
+namespace MartynBiz\Slim\Module\Auth\Validator;
 
 use MartynBiz\Validator;
-use MartynBiz\Slim\Modules\Auth\Model\User;
+use MartynBiz\Slim\Module\Auth\Model\User;
 
 /**
  * Extension of MartynBiz\Validator so we can define custom validation classes

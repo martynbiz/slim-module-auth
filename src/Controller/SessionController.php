@@ -1,9 +1,9 @@
 <?php
-namespace MartynBiz\Slim\Modules\Auth\Controller;
+namespace MartynBiz\Slim\Module\Auth\Controller;
 
 use Facebook\Exceptions\FacebookResponseException;
 use Facebook\Exceptions\FacebookSDKException;
-use MartynBiz\Slim\Modules\Auth\Exception\InvalidAuthToken as InvalidAuthTokenException;
+use MartynBiz\Slim\Module\Auth\Exception\InvalidAuthToken as InvalidAuthTokenException;
 
 class SessionController extends BaseController
 {

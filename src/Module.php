@@ -1,13 +1,14 @@
 <?php
-namespace MartynBiz\Slim\Modules\Auth;
+namespace MartynBiz\Slim\Module\Auth;
 
 use Slim\App;
 use Slim\Container;
 use Slim\Http\Headers;
 use MartynBiz\Mongo\Connection;
-use MartynBiz\Slim\Modules\Core\Http\Request;
-use MartynBiz\Slim\Modules\Core\Http\Response;
+use MartynBiz\Slim\Module\Core\Http\Request;
+use MartynBiz\Slim\Module\Core\Http\Response;
 use MartynBiz\Slim\Module\ModuleInterface;
+use MartynBiz\Slim\Module\Auth;
 
 class Module implements ModuleInterface
 {
@@ -21,13 +22,13 @@ class Module implements ModuleInterface
 
         // Models
         $container['auth.model.user'] = function ($c) {
-            return new \MartynBiz\Slim\Modules\Auth\Model\User();
+            return new Auth\Model\User();
         };
 
         $container['auth'] = function ($c) {
             $settings = $c->get('settings')['auth'];
-            $authAdapter = new \MartynBiz\Slim\Modules\Auth\Adapter\Mongo( $c['auth.model.user'] );
-            return new \MartynBiz\Slim\Modules\Auth\Auth($authAdapter, $settings);
+            $authAdapter = new Auth\Adapter\Mongo( $c['auth.model.user'] );
+            return new Auth\Auth($authAdapter, $settings);
         };
     }
 
@@ -54,22 +55,22 @@ class Module implements ModuleInterface
         $app->group('/auth', function () {
 
             $this->post('',
-                '\MartynBiz\Slim\Modules\Auth\Controller\SessionController:post')->setName('auth_session_post');
+                '\MartynBiz\Slim\Module\Auth\Controller\SessionController:post')->setName('auth_session_post');
             $this->delete('',
-                '\MartynBiz\Slim\Modules\Auth\Controller\SessionController:delete')->setName('auth_session_delete');
+                '\MartynBiz\Slim\Module\Auth\Controller\SessionController:delete')->setName('auth_session_delete');
             $this->get('/login',
-                '\MartynBiz\Slim\Modules\Auth\Controller\SessionController:index')->setName('auth_session_login');
+                '\MartynBiz\Slim\Module\Auth\Controller\SessionController:index')->setName('auth_session_login');
             $this->get('/logout',
-                '\MartynBiz\Slim\Modules\Auth\Controller\SessionController:index')->setName('auth_session_logout');
+                '\MartynBiz\Slim\Module\Auth\Controller\SessionController:index')->setName('auth_session_logout');
 
             $this->get('/register',
-                '\MartynBiz\Slim\Modules\Auth\Controller\UsersController:create')->setName('auth_users_create');
+                '\MartynBiz\Slim\Module\Auth\Controller\UsersController:create')->setName('auth_users_create');
             $this->post('/register',
-                '\MartynBiz\Slim\Modules\Auth\Controller\UsersController:post')->setName('auth_users_post');
+                '\MartynBiz\Slim\Module\Auth\Controller\UsersController:post')->setName('auth_users_post');
             $this->get('/resetpassword',
-                '\MartynBiz\Slim\Modules\Auth\Controller\UsersController:resetpassword')->setName('auth_users_reset_password');
+                '\MartynBiz\Slim\Module\Auth\Controller\UsersController:resetpassword')->setName('auth_users_reset_password');
             $this->post('/resetpassword',
-                '\MartynBiz\Slim\Modules\Auth\Controller\UsersController:resetpassword')->setName('auth_users_reset_password_post');
+                '\MartynBiz\Slim\Module\Auth\Controller\UsersController:resetpassword')->setName('auth_users_reset_password_post');
         });
 
         // admin routes -- invokes auth middleware
@@ -79,21 +80,21 @@ class Module implements ModuleInterface
             $this->group('/users', function () {
 
                 $this->get('',
-                    '\MartynBiz\Slim\Modules\Auth\Controller\Admin\UsersController:index')->setName('admin_users');
+                    '\MartynBiz\Slim\Module\Auth\Controller\Admin\UsersController:index')->setName('admin_users');
                 $this->get('/{id:[0-9]+}',
-                    '\MartynBiz\Slim\Modules\Auth\Controller\Admin\UsersController:show')->setName('admin_users_show');
+                    '\MartynBiz\Slim\Module\Auth\Controller\Admin\UsersController:show')->setName('admin_users_show');
                 $this->get('/create',
-                    '\MartynBiz\Slim\Modules\Auth\Controller\Admin\UsersController:create')->setName('admin_users_create');
+                    '\MartynBiz\Slim\Module\Auth\Controller\Admin\UsersController:create')->setName('admin_users_create');
                 $this->get('/{id:[0-9]+}/edit',
-                    '\MartynBiz\Slim\Modules\Auth\Controller\Admin\UsersController:edit')->setName('admin_users_edit');
+                    '\MartynBiz\Slim\Module\Auth\Controller\Admin\UsersController:edit')->setName('admin_users_edit');
 
                 $this->put('/{id:[0-9]+}',
-                    '\MartynBiz\Slim\Modules\Auth\Controller\Admin\UsersController:update')->setName('admin_users_update');
+                    '\MartynBiz\Slim\Module\Auth\Controller\Admin\UsersController:update')->setName('admin_users_update');
                 $this->delete('/{id:[0-9]+}',
-                    '\MartynBiz\Slim\Modules\Auth\Controller\Admin\UsersController:delete')->setName('admin_users_delete');
+                    '\MartynBiz\Slim\Module\Auth\Controller\Admin\UsersController:delete')->setName('admin_users_delete');
 
-            })->add( new \MartynBiz\Slim\Modules\Auth\Middleware\RoleAccess($this->getContainer(), [ \MartynBiz\Slim\Modules\Auth\Model\User::ROLE_ADMIN ]) );
+            })->add( new Auth\Middleware\RoleAccess($this->getContainer(), [ Auth\Model\User::ROLE_ADMIN ]) );
 
-        })->add( new \MartynBiz\Slim\Modules\Auth\Middleware\Auth( $container['auth'] ) );
+        })->add( new Auth\Middleware\Auth( $container['auth'] ) );
     }
 }

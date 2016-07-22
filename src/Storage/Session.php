@@ -1,5 +1,5 @@
 <?php
-namespace MartynBiz\Slim\Modules\Auth\Storage;
+namespace MartynBiz\Slim\Module\Auth\Storage;
 
 /**
  * This ArrayAccess implementation is designed to allow session variables to be

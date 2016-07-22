@@ -1,8 +1,8 @@
 <?php
-namespace MartynBiz\Slim\Modules\Auth\Middleware;
+namespace MartynBiz\Slim\Module\Auth\Middleware;
 
 use Slim\Container;
-use MartynBiz\Slim\Modules\Auth\Exception\PermissionDenied;
+use MartynBiz\Slim\Module\Auth\Exception\PermissionDenied;
 
 class RoleAccess
 {

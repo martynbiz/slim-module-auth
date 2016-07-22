@@ -1,8 +1,8 @@
 <?php
-namespace MartynBiz\Slim\Modules\Auth;
+namespace MartynBiz\Slim\Module\Auth;
 
-use MartynBiz\Slim\Modules\Auth\Adapter\AdapterInterface;
-use MartynBiz\Slim\Modules\Auth\Model\User;
+use MartynBiz\Slim\Module\Auth\Adapter\AdapterInterface;
+use MartynBiz\Slim\Module\Auth\Model\User;
 
 /**
  * This handles authentication queries such as comparing username/password,

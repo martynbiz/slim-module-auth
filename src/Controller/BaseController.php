@@ -1,11 +1,11 @@
 <?php
-namespace MartynBiz\Slim\Modules\Auth\Controller;
+namespace MartynBiz\Slim\Module\Auth\Controller;
 
 use MartynBiz\Slim3Controller\Controller;
-use MartynBiz\Slim\Modules\Auth\Exception\InvalidReturnToUrl;
-use MartynBiz\Slim\Modules\Auth\Model\Account;
+use MartynBiz\Slim\Module\Auth\Exception\InvalidReturnToUrl;
+use MartynBiz\Slim\Module\Auth\Model\Account;
 
-abstract class BaseController extends \MartynBiz\Slim\Modules\Core\Controller\BaseController
+abstract class BaseController extends \MartynBiz\Slim\Module\Core\Controller\BaseController
 {
     /**
      * Will ensure that returnTo url is valid before doing redirect. Otherwise mean
