@@ -15,7 +15,7 @@
     "prefer-stable": true,
     "autoload": {
         "psr-4": {
-            "MartynBiz\\Slim\\Modules\\Auth\\": "Auth/"
+            "MartynBiz\\Slim\\Modules\\Auth\\": "src/"
         }
     },
     "require": {
