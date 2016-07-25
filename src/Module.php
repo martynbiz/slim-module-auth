@@ -39,7 +39,9 @@ class Module implements ModuleInterface
      */
     public function initMiddleware(App $app)
     {
+        $container = $app->getContainer();
 
+        $app->add(new Auth\Middleware\CurrentUser($container));
     }
 
     /**
@@ -96,5 +98,14 @@ class Module implements ModuleInterface
             })->add( new Auth\Middleware\RoleAccess($this->getContainer(), [ Auth\Model\User::ROLE_ADMIN ]) );
 
         })->add( new Auth\Middleware\Auth( $container['auth'] ) );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function copyFiles($dest)
+    {
+        $src = __DIR__ . '/../files/*';
+        shell_exec("cp -rn $src $dest");
     }
 }

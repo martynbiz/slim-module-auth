@@ -1,18 +1,23 @@
 <?php
+/**
+ * App middleware that will check if a user is authenticated or not, and set
+ * the current user for the renderer to access
+ */
+
 namespace MartynBiz\Slim\Module\Auth\Middleware;
 
-use MartynBiz\Slim\Module\Auth\Auth as AuthService;
+use Slim\Container;
 
-class AdminOnly
+class CurrentUser
 {
     /**
-     * @var App\Auth\Auth
+     * @var Slim\Container $container
      */
     protected $auth;
 
-    public function __construct(AuthService $auth)
+    public function __construct(Container $container)
     {
-        $this->auth = $auth;
+        $this->container = $container;
     }
 
     /**
@@ -26,10 +31,10 @@ class AdminOnly
      */
     public function __invoke($request, $response, $next)
     {
-        $currentUser = $this->auth->getCurrentUser();
-        if (! $currentUser->isAdmin() ) {
-            throw new PermissionDenied('Permission denied to manage users.');
-        }
+        // attach current user to the template engine
+        $this->container->get('renderer')->useData([
+            'currentUser' => $this->container->get('auth')->getCurrentUser()
+        ]);
 
         // pass onto the next callable
         $response = $next($request, $response);

@@ -26,20 +26,20 @@ abstract class BaseController extends \MartynBiz\Slim\Module\Core\Controller\Bas
         return $container->get('response')->withRedirect($returnTo);
     }
 
-    /**
-     * Will do the Core render, but attach the currentUser
-     * @param string $file Name of the template/ view to render
-     * @param array $args Additional variables to pass to the view
-     * @param Response?
-     */
-    public function render($file, $data=array())
-    {
-        $container = $this->getContainer();
-
-        if ($container->has('auth')) {
-            $data['currentUser'] = $container->get('auth')->getCurrentUser();
-        }
-
-        return parent::render($file, $data);
-    }
+    // /**
+    //  * Will do the Core render, but attach the currentUser
+    //  * @param string $file Name of the template/ view to render
+    //  * @param array $args Additional variables to pass to the view
+    //  * @param Response?
+    //  */
+    // public function render($file, $data=array())
+    // {
+    //     $container = $this->getContainer();
+    //
+    //     if ($container->has('auth')) {
+    //         $data['currentUser'] = $container->get('auth')->getCurrentUser();
+    //     }
+    //
+    //     return parent::render($file, $data);
+    // }
 }
