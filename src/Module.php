@@ -101,11 +101,28 @@ class Module implements ModuleInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Copies files from vendor dir to project tree
+     * @param string $dest The root of the project
+     * @return void
      */
     public function copyFiles($dest)
     {
         $src = __DIR__ . '/../files/*';
         shell_exec("cp -rn $src $dest");
+    }
+
+    /**
+     * Removes files from the project tree
+     * @param string $dest The root of the project
+     * @return void
+     */
+    public function removeFiles($dest)
+    {
+        if (file_exists("$dest/src/autoload/settings.martynbiz-auth.php")) {
+            shell_exec("rm $dest/src/autoload/settings.martynbiz-auth.php");
+        }
+        if (file_exists("$dest/templates/martynbiz-auth")) {
+            shell_exec("rm -rf $dest/templates/martynbiz-auth");
+        }
     }
 }
