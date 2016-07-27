@@ -5,10 +5,10 @@ return [
         // Renderer settings
         'renderer' => [
             'folders' => [
-                APPLICATION_PATH . '/modules/martynbiz-auth/templates',
+                'martynbiz-auth' => APPLICATION_PATH . '/modules/martynbiz-auth/templates',
             ],
         ],
-        
+
         'auth' => [
 
             // this is the session namespace. apps that want to authenticate
