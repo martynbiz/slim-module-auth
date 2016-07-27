@@ -10,7 +10,7 @@ class UsersController extends BaseController
     {
         $users = $this->get('auth.model.user')->find();
 
-        return $this->render('auth/admin/users/index', [
+        return $this->render('martynbiz-auth::admin/users/index', [
             'users' => $users,
         ]);
     }
@@ -26,7 +26,7 @@ class UsersController extends BaseController
 
         $user->set( $this->getPost() );
 
-        return $this->render('auth/admin/users/edit', [
+        return $this->render('martynbiz-auth::admin/users/edit', [
             'user' => $user,
         ]);
     }

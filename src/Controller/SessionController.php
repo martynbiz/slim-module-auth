@@ -137,9 +137,9 @@ class SessionController extends BaseController
             // a DELETE request which will be handled by the delete() method
             // if the user is not authenticated, the show the login page
             if ($container->get('auth')->isAuthenticated()) {
-                return $this->render('martynbiz-auth/session/logout', compact('params'));
+                return $this->render('martynbiz-auth::session/logout', compact('params'));
             } else {
-                return $this->render('martynbiz-auth/session/login', compact('params'));
+                return $this->render('martynbiz-auth::session/login', compact('params'));
             }
 
         // }
