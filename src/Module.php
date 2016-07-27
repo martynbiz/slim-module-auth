@@ -107,7 +107,7 @@ class Module implements ModuleInterface
      */
     public function copyFiles($dest)
     {
-        $src = __DIR__ . '/../files/*';
+        $src = __DIR__ . '/../modules/*';
         shell_exec("cp -rn $src $dest");
     }
 
@@ -118,11 +118,8 @@ class Module implements ModuleInterface
      */
     public function removeFiles($dest)
     {
-        if (file_exists("$dest/src/autoload/settings.martynbiz-auth.php")) {
-            shell_exec("rm $dest/src/autoload/settings.martynbiz-auth.php");
-        }
-        if (file_exists("$dest/templates/martynbiz-auth")) {
-            shell_exec("rm -rf $dest/templates/martynbiz-auth");
+        if ($path = realpath("$dest/martynbiz-auth")) {
+            shell_exec("rm -rf $path");
         }
     }
 }
