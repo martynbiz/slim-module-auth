@@ -1,88 +1,229 @@
 <?php
 namespace MartynBiz\Slim\Module\Auth\Model;
 
-use MartynBiz\Slim\Module\Core\Model\Base;
+use Illuminate\Database\Eloquent\Model;
 
-/**
- *
- */
-class User extends Base
+class User extends Model
 {
     const ROLE_ADMIN = 'admin';
     const ROLE_EDITOR = 'editor';
     const ROLE_CONTRIBUTOR = 'contributor';
 
-    // collection this model refers to
-    protected static $collection = 'users';
+    /**
+     * @var array
+     */
+    protected $hidden = array(
+        'password',
+        'salt',
+    );
 
-    // define on the fields that can be saved
-    protected static $whitelist = array(
+    /**
+    * @var array
+    */
+    protected $fillable = array(
         'first_name',
         'last_name',
+        'username',
         'email',
         'password',
     );
 
-    // ===============================
-    // ACL methods
-    // The following methods are to grant an authenticated user access to
-    // a particular role on a resource (e.g. view a given article ). These are
-    // also quite readable when written out e.g. $user->canEdit($article)
-
-    // roles
-
     /**
-     * Return true if "admin" user
-     * @return boolean
+     *
      */
-    public function isAdmin()
+    protected static $validSettings = [
+        USER_SETTING_LANGUAGE,
+        USER_SETTING_DASHBOARD_WIDGETS,
+    ];
+
+    public function settings()
     {
-        return (isset($this->data['role']) and $this->data['role'] == static::ROLE_ADMIN);
+        return $this->hasMany('App\\Model\\UserSetting'); //, 'user_id');
     }
 
-    /**
-     * Return true if "editor" user
-     * @return boolean
-     */
-    public function isEditor()
+    public function transactions()
     {
-        return (isset($this->data['role']) and $this->data['role'] == static::ROLE_EDITOR);
+        return $this->hasMany('App\\Model\\Transaction'); //, 'user_id');
     }
 
-    /**
-     * Return true if "member" user
-     * @return boolean
-     */
-    public function isContributor()
+    public function tags()
     {
-        return (isset($this->data['role']) and $this->data['role'] == static::ROLE_CONTRIBUTOR);
+        return $this->hasMany('App\\Model\\Tag'); //, 'user_id');
     }
 
-    /**
-     * Encrypt password upon setting
-     */
-    public function setPassword($value)
+    public function funds()
     {
-        $hash = password_hash($value, PASSWORD_BCRYPT, array(
-            'cost' => 12,
-        ));
-
-        return $hash;
+        return $this->hasMany('App\\Model\\Fund'); //, 'user_id');
     }
 
-    public function getRole($value)
+    public function categories()
     {
-        switch ($this->data['role'])
-        {
-            case self::ROLE_ADMIN:
-                return 'Admin';
-                break;
-            case self::ROLE_EDITOR:
-                return 'Editor';
-                break;
-            case self::ROLE_CONTRIBUTOR:
-                return 'Contributor';
-                break;
+        return $this->hasMany('App\\Model\\Category'); //, 'user_id');
+    }
+
+    public function groups()
+    {
+        return $this->hasMany('App\\Model\\Group'); //, 'user_id');
+    }
+
+    public function auth_tokens()
+    {
+        return $this->hasMany('App\\Model\\AuthToken'); //, 'user_id');
+    }
+
+    public function recovery_token()
+    {
+        return $this->hasOne('App\\Model\\RecoveryToken'); //, 'user_id');
+    }
+
+    public function api_token()
+    {
+        return $this->hasOne('App\\Model\\ApiToken'); //, 'user_id');
+    }
+
+    public function getSetting($name)
+    {
+        if (!in_array(self::$validSettings, $settings->name)) {
+            throw new \Exception("Trying to set invalid setting");
         }
+
+        if ($setting = $this->settings()->where('name', $name)->first()) {
+            return $setting->value;
+        }
+    }
+
+    public function getSettings()
+    {
+        $settings = [];
+        foreach ($this->settings()->get() as $setting) {
+            $settings[$setting->name] = $setting->value;
+        }
+
+        return $settings;
+    }
+
+    public function setSetting($name, $value)
+    {
+        if (!in_array(self::$validSettings, $settings->name)) {
+            throw new \Exception("Trying to set invalid setting");
+        }
+
+        if (!$setting = $this->settings()->where('name', $name)->first()) {
+            $this->settings()->create([
+                'name' => $name,
+                'value' => $value,
+            ]);
+        }
+    }
+
+    public function setSettings($settings)
+    {
+        $settings = array_intersect_key($settings, array_flip(self::$validSettings));
+
+        foreach ($settings as $name => $value) {
+            $setting = $this->settings()->firstOrNew(['name' => $name]);
+            $setting->value = $value;
+            $setting->save();
+        }
+    }
+
+    /**
+     * Instead of using boot()::saving events, which don't seem
+     * to work properly in tests, I'm just overriding the save()
+     * method here.
+     *
+     * @param $options array
+     * @return
+     */
+    public function save(array $options = [])
+    {
+        // set the password to a random string if empty, this is typically the
+        // case when a silent user is created during a facebook login
+        if (empty($this->password)) {
+            $this->password = uniqid();
+        }
+
+        // username, if not set, generate from first and last name - ensure it's unique
+        if (empty($this->username)) {
+
+            $base = strtolower($this->first_name . '.' . $this->last_name);
+
+            do {
+                $username = $base . @$suffix;
+                $duplicate = User::where('username', '=', $username)->first();
+            } while($duplicate and $suffix = rand(1000, 9999));
+
+            // return the original/ generated username
+            $this->username = $username;
+        }
+
+        return parent::save($options);
+    }
+
+    // public static function boot()
+    // {
+    //     parent::boot();
+    //
+    //     static::creating(function ($user) {
+    //
+    //         // set the password to a random string if empty, this is typically the
+    //         // case when a silent user is created during a facebook login
+    //         if (empty($user->password)) {
+    //             $user->password = uniqid();
+    //         }
+    //
+    //         // username, if not set, generate from first and last name - ensure it's unique
+    //         if (empty($user->username)) {
+    //
+    //             $base = strtolower($user->first_name . '.' . $user->last_name);
+    //
+    //             do {
+    //                 $username = $base . @$suffix;
+    //                 $duplicate = User::where('username', '=', $username)->first();
+    //             } while($duplicate and $suffix = rand(1000, 9999));
+    //
+    //             // return the original/ generated username
+    //             $user->username = $username;
+    //         }
+    //     });
+    // }
+
+    /**
+     * Encrypt password upon setting, set salt too
+     */
+    public function setPasswordAttribute($value)
+    {
+        $this->attributes['password'] = password_hash(
+            $value,
+            PASSWORD_BCRYPT,
+            ['cost' => 12]
+        );
+    }
+
+    /**
+     * Scope a query to find a user by email
+     * Makes testing easier when we don't have to chain eloquent methods
+     * @param Query? $query
+     * @param string $email
+     * @return User|null
+     */
+    public function findByAuthTokenSelector($selector)
+    {
+        $authToken = AuthToken::where('selector', $selector)
+            ->first();
+
+        if ($authToken) {
+            return $authToken->user;
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Gravatar image url from email
+     */
+    public function getGravatarImageUrl($size=80)
+    {
+        return 'https://www.gravatar.com/avatar/' . md5(strtolower(trim($this->email))) . '?s=' . $size;
     }
 }

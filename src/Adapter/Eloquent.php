@@ -1,12 +1,9 @@
 <?php
 namespace MartynBiz\Slim\Module\Auth\Adapter;
 
-// use Zend\Authentication\Adapter\AdapterInterface;
-// use Zend\Authentication\Result;
-
 use MartynBiz\Slim\Module\Auth\Model\User;
 
-class Mongo implements AdapterInterface
+class Eloquent implements AdapterInterface
 {
     /**
      * @var string
@@ -39,19 +36,11 @@ class Mongo implements AdapterInterface
     public function authenticate($identity, $password)
     {
         // look up $user from the database
-        $user = $this->model->findOne( array(
-            'email' => $identity,
-        ) );
+        $user = $this->model->where('email', $identity)
+            ->orWhere('username', $identity)
+            ->first();
+        if (!$user) return false;
 
-        return ($user and password_verify($password, $user->password));
-    }
-
-    /**
-     * This is the identity (e.g. username) stored for this user
-     * @return string
-     */
-    public function getUser($query)
-    {
-        return $this->model->findOne($query);
+        return password_verify($password, $user->password);
     }
 }

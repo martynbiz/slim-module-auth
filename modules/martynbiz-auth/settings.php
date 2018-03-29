@@ -5,11 +5,13 @@ return [
         // Renderer settings
         'renderer' => [
             'folders' => [
-                'martynbiz-auth' => APPLICATION_PATH . '/modules/martynbiz-auth/templates',
+                'martynbiz-auth' => APPLICATION_PATH . '/app/modules/martynbiz-auth/templates',
             ],
         ],
 
         'auth' => [
+
+            'base_path' => '/auth',
 
             // this is the session namespace. apps that want to authenticate
             // using this auth app must configure their mwauth-client to match
