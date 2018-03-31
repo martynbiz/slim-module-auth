@@ -32,8 +32,7 @@ class User extends Model
      *
      */
     protected static $validSettings = [
-        USER_SETTING_LANGUAGE,
-        USER_SETTING_DASHBOARD_WIDGETS,
+        "language",
     ];
 
     public function settings()

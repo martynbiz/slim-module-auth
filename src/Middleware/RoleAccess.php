@@ -36,7 +36,7 @@ class RoleAccess
      */
     public function __invoke($request, $response, $next)
     {
-        $auth = $this->container['auth'];
+        $auth = $this->container['martynbiz-auth.auth'];
 
         $currentUser = $auth->getCurrentUser();
         if (! in_array($currentUser->get('role', false), $this->allowed) ) {

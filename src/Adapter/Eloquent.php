@@ -43,4 +43,13 @@ class Eloquent implements AdapterInterface
 
         return password_verify($password, $user->password);
     }
+
+    /**
+     * This is the identity (e.g. username) stored for this user
+     * @return string
+     */
+    public function getUserByEmail($email)
+    {
+        return $this->model->where('email', $email)->first();
+    }
 }

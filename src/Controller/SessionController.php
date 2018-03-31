@@ -29,7 +29,7 @@ class SessionController extends BaseController
         //
         // // if the auth_token (remember me) cookie is set, and the user is not
         // // authenticated - handle the token (e.g. auto sign in)
-        // if ($rememberMe and !$this->get('auth')->isAuthenticated()) {
+        // if ($rememberMe and !$this->get('martynbiz-auth.auth')->isAuthenticated()) {
         //
         //     @list($selector, $token) = explode('_', $rememberMe);
         //
@@ -42,7 +42,7 @@ class SessionController extends BaseController
         //
         //             // maybe the auth_token cookie has expired, and been cleaned from the
         //             // database. in any case, we'll just remove it from the client's machine
-        //             $this->get('auth')->deleteAuthTokenCookie();
+        //             $this->get('martynbiz-auth.auth')->deleteAuthTokenCookie();
         //
         //             // throwing an exception will be caught and an error message displayed
         //             throw new InvalidAuthTokenException('Could not automatically signin with remember me token (0). Please login again.');
@@ -54,7 +54,7 @@ class SessionController extends BaseController
         //
         //             // token string is invalid, this could be an attack at someone's account (or not)
         //             // remove the token from the database and the auth token and the client cookie
-        //             $this->get('auth')->deleteAuthTokenCookie();
+        //             $this->get('martynbiz-auth.auth')->deleteAuthTokenCookie();
         //             $authToken->delete();
         //
         //             // throwing an exception will be caught and an error message displayed
@@ -68,7 +68,7 @@ class SessionController extends BaseController
         //
         //             // account not found
         //             // remove the token from the database and the auth token and the client cookie
-        //             $this->get('auth')->deleteAuthTokenCookie();
+        //             $this->get('martynbiz-auth.auth')->deleteAuthTokenCookie();
         //             $authToken->delete();
         //
         //             // throwing an exception will be caught and an error message displayed
@@ -80,11 +80,11 @@ class SessionController extends BaseController
         //         // all good :) sign this person in using their auth_token...
         //
         //         // update remember me with new token
-        //         $this->get('auth')->remember($account);
+        //         $this->get('martynbiz-auth.auth')->remember($account);
         //
         //         // set attributes. valid_attributes will only set the fields we
         //         // want to be avialable (e.g. not password)
-        //         $this->get('auth')->setAttributes( array_merge($account->toArray(), array(
+        //         $this->get('martynbiz-auth.auth')->setAttributes( array_merge($account->toArray(), array(
         //             'backend' => Account::BACKEND_JAPANTRAVEL,
         //         )) );
         //
@@ -136,7 +136,7 @@ class SessionController extends BaseController
             // will serve as a landing page, although most typically apps will send
             // a DELETE request which will be handled by the delete() method
             // if the user is not authenticated, the show the login page
-            if ($container->get('auth')->isAuthenticated()) {
+            if ($container->get('martynbiz-auth.auth')->isAuthenticated()) {
                 return $this->render('martynbiz-auth::session/logout', compact('params'));
             } else {
                 return $this->render('martynbiz-auth::session/login', compact('params'));
@@ -153,31 +153,28 @@ class SessionController extends BaseController
         // GET and POST
         $params = array_merge($request->getQueryParams(), $request->getParams());
         $container = $this->getContainer();
-        $settings = $container->get('settings');
+        $settings = $container->get('settings')['auth'];
 
         // authentice with the email (might even be username, which is fine) and pw
-        if ($container->get('auth')->authenticate($params['email'], $params['password'])) {
+        if ($container->get('martynbiz-auth.auth')->authenticate($params['email'], $params['password'])) {
 
             // as authentication has passed, get the user by email OR username
-            $user = $container->get('auth.model.user')->findOne(array('$or' => array(
-                array('email' => $params['email']),
-                array('username' => $params['email'])
-            )));
+            $user = $container->get('martynbiz-auth.auth')->getAdapter()->getUserByEmail( $params['email'] );
 
             // // if requested (remember me checkbox), create remember me token cookie
             // // else, remove the cookie (if exists)
             // if (isset($params['remember_me'])) {
-            //     $this->get('auth')->remember($account);
+            //     $this->get('martynbiz-auth.auth')->remember($account);
             // } else {
-            //     $this->get('auth')->forget($account);
+            //     $this->get('martynbiz-auth.auth')->forget($account);
             // }
 
             // set attributes. valid_attributes will only set the fields we
             // want to be avialable (e.g. not password)
-            $container->get('auth')->setAttributes( $user->toArray() );
+            $container->get('martynbiz-auth.auth')->setAttributes( $user->toArray() );
 
             // redirect back to returnTo, or /session (logout page - default) if not provided
-            isset($params['returnTo']) or $params['returnTo'] = '/';
+            isset($params['returnTo']) or $params['returnTo'] = $container->get('router')->pathFor($settings['redirect_after_login']);
             return $this->returnTo($params['returnTo']);
 
         } else {
@@ -199,21 +196,21 @@ class SessionController extends BaseController
         // combine GET and POST params
         $params = array_merge($request->getQueryParams(), $request->getParams());
         $container = $this->getContainer();
-        $settings = $container->get('settings');
+        $settings = $container->get('settings')['auth'];
 
         // // also, delete any auth_token we have for the account and cookie
         // $account = $this->getSessionAccount();
         // if ($account) {
-        //     $this->get('auth')->forget($account);
+        //     $this->get('martynbiz-auth.auth')->forget($account);
         // } else { // just delete cookie then - if exists
-        //     $this->get('auth')->deleteAuthTokenCookie();
+        //     $this->get('martynbiz-auth.auth')->deleteAuthTokenCookie();
         // }
 
         // this will effective end the "session" by clearning out the session vars
-        $container->get('auth')->clearAttributes();
+        $container->get('martynbiz-auth.auth')->clearAttributes();
 
         // redirect back to returnTo, or /session (logout page) if not provided
-        isset($params['returnTo']) or $params['returnTo'] = '/';
+        isset($params['returnTo']) or $params['returnTo'] = $container->get('router')->pathFor($settings['redirect_after_logout']);
         return $this->returnTo($params['returnTo']);
     }
 
@@ -365,13 +362,13 @@ class SessionController extends BaseController
     //     // cookie so that they will be authenticated even with social media login (thanks
     //     // to the fact that we also silently create an account for sm login :)
     //     if (isset($params['remember_me'])) {
-    //         $this->get('auth')->remember($account);
+    //         $this->get('martynbiz-auth.auth')->remember($account);
     //     } else {
-    //         $this->get('auth')->forget($account);
+    //         $this->get('martynbiz-auth.auth')->forget($account);
     //     }
     //
     //     // set session attributes. no desirable parameters will be filtered (e.g. password, salt)
-    //     $this->get('auth')->setAttributes( array_merge($account->toArray(), array(
+    //     $this->get('martynbiz-auth.auth')->setAttributes( array_merge($account->toArray(), array(
     //         'backend' => Account::BACKEND_FACEBOOK,
     //     )) );
     //
@@ -385,7 +382,7 @@ class SessionController extends BaseController
     //  */
     // protected function getSessionAccount()
     // {
-    //     $attributes = $this->get('auth')->getAttributes();
+    //     $attributes = $this->get('martynbiz-auth.auth')->getAttributes();
     //     return $this->get('model.account')->findByEmail($attributes['email']);
     // }
 }

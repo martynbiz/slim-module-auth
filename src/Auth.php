@@ -227,11 +227,18 @@ class Auth
             }
 
             // lookup the user by identity
-            $this->currentUser = $this->adapter->getUser(array(
-                'email' => $attributes['email'],
-            ));
+            $this->currentUser = $this->adapter->getUserByEmail( $attributes['email'] );
         }
 
         return $this->currentUser;
+    }
+
+    /**
+     * This is the identity (e.g. username) stored for this user
+     * @return string
+     */
+    public function getAdapter()
+    {
+        return $this->adapter;
     }
 }

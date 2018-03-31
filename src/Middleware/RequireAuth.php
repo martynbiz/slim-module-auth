@@ -1,14 +1,9 @@
 <?php
-/**
- * App middleware that will check if a user is authenticated or not, and set
- * the current user for the renderer to access
- */
-
 namespace MartynBiz\Slim\Module\Auth\Middleware;
 
 use Slim\Container;
 
-class CurrentUser
+class RequireAuth
 {
     /**
      * @var Slim\Container $container
@@ -21,7 +16,7 @@ class CurrentUser
     }
 
     /**
-     * Example middleware invokable class
+     * Attach to routes to ensure protected pages
      *
      * @param  \Psr\Http\Message\ServerRequestInterface $request  PSR7 request
      * @param  \Psr\Http\Message\ResponseInterface      $response PSR7 response
@@ -31,12 +26,14 @@ class CurrentUser
      */
     public function __invoke($request, $response, $next)
     {
-        // attach current user to the template engine
-        $this->container->get('renderer')->useData([
-            'currentUser' => $this->container->get('martynbiz-auth.auth')->getCurrentUser()
-        ]);
+        $attributes = $this->container->get('martynbiz-auth.auth')->getAttributes();
+        $currentUser =  $this->container->get('martynbiz-auth.model.user')->where('id', $attributes['id'])->first();
 
-        // pass onto the next callable
+        if (!$currentUser) {
+            $loginUrl = $this->container->get('router')->pathFor('auth_session_login');
+            return $response->withRedirect($loginUrl, 302);
+        }
+
         $response = $next($request, $response);
 
         return $response;

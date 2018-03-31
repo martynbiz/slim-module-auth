@@ -1,5 +1,5 @@
 <?php
-namespace MartynBiz\Slim\Module\Auth\Validator;
+namespace MartynBiz\Slim\Module\Auth;
 
 use MartynBiz\Validator;
 use MartynBiz\Slim\Module\Auth\Model\User;
@@ -7,7 +7,7 @@ use MartynBiz\Slim\Module\Auth\Model\User;
 /**
  * Extension of MartynBiz\Validator so we can define custom validation classes
  */
-class RegisterValidator extends Validator
+class AuthValidator extends Validator
 {
     /**
      * @var User
@@ -28,9 +28,7 @@ class RegisterValidator extends Validator
     public function isUniqueEmail($message)
     {
         //check whether this email exists in the db
-        $user = $this->userModel->findOne( array(
-            'email' => $this->value,
-        ) );
+        $user = $this->userModel->where('email', $this->value)->first();
 
         // log error
         if ($user) {

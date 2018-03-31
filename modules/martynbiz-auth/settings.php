@@ -5,13 +5,17 @@ return [
         // Renderer settings
         'renderer' => [
             'folders' => [
-                'martynbiz-auth' => APPLICATION_PATH . '/app/modules/martynbiz-auth/templates',
+                'martynbiz-auth' => APPLICATION_PATH . '/modules/martynbiz-auth/templates',
             ],
         ],
 
         'auth' => [
 
             'base_path' => '/auth',
+
+            'redirect_after_register' => 'console_home',
+            'redirect_after_login' => 'console_home',
+            'redirect_after_logout' => 'auth_session_login',
 
             // this is the session namespace. apps that want to authenticate
             // using this auth app must configure their mwauth-client to match
@@ -37,12 +41,6 @@ return [
                 'name',
                 'email',
                 'facebook_id',
-            ],
-        ],
-
-        'mongo' => [
-            'classmap' => [
-                'users' => '\\MartynBiz\\Slim\\Module\\Auth\\Model\\User',
             ],
         ],
     ],

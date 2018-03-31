@@ -1,23 +1,30 @@
-<?php $this->layout('layouts/default'); ?>
+<?php $this->layout('layouts/console', [
+    'title' => 'Artists',
+    // 'back_path' => $this->pathFor('console_home'),
+]); ?>
+
+<?php $this->section('breadcrumbs') ?>
+    <li>
+        <span class="show-for-sr">Current: </span> Logout
+    </li>
+<?php $this->replace() ?>
 
 <?php $this->section('content') ?>
-    <div class="col-sm-6 col-sm-offset-3 sso-login">
-        <div class="row">
-            <div class="col-xs-12">
-                <form class="well text-center" method="post" action="<?= $this->pathFor('auth_session_delete') ?>">
-                    <p><?= $this->translate('logout_text') ?></p>
+    <div class="row">
+    	<div class="small-12 medium-12 columns">
+            <form id="logout_form" class="well text-center" method="post" action="<?= $this->pathFor('auth_session_delete') ?>">
+                <?= $this->translate('logout_intro') ?>
 
-                    <input type="hidden" name="_METHOD" value="DELETE">
+                <input type="hidden" name="_METHOD" value="DELETE">
 
-                    <?php if(isset($params['returnTo'])): ?>
-                        <input type="hidden" name="returnTo" value="<?= $params['returnTo'] ?>">
-                    <?php endif ?>
+                <input type="hidden" name="<?= $this->csrf_name ?>" value="<?= $this->csrf_value ?>">
 
-                    <?= $this->insert('partials/csrf_token') ?>
+                <?php if(isset($this->params['returnTo'])): ?>
+                    <input type="hidden" name="returnTo" value="<?= $this->params['returnTo'] ?>">
+                <?php endif; ?>
 
-                    <button class="btn btn-default"><?= $this->translate('logout') ?></button>
-                </form>
-            </div>
+                <button class="button"><?= $this->translate('logout_button') ?></button>
+            </form>
         </div>
     </div>
 <?php $this->replace() ?>
