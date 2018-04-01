@@ -66,16 +66,16 @@ class Module implements ModuleInterface
                     '\MartynBiz\Slim\Module\Auth\Controller\SessionController:index')->setName('auth_session_logout');
             });
 
-            $app->group('/users', function () use ($app) {
-                $app->get('/register',
-                    '\MartynBiz\Slim\Module\Auth\Controller\UsersController:register')->setName('auth_users_register');
-                $app->post('/register',
-                    '\MartynBiz\Slim\Module\Auth\Controller\UsersController:post')->setName('auth_users_post');
-                $app->get('/resetpassword',
-                    '\MartynBiz\Slim\Module\Auth\Controller\UsersController:resetpassword')->setName('auth_users_reset_password');
-                $app->post('/resetpassword',
-                    '\MartynBiz\Slim\Module\Auth\Controller\UsersController:resetpassword')->setName('auth_users_reset_password_post');
-            });
+            // $app->group('/users', function () use ($app) {
+            //     $app->get('/register',
+            //         '\MartynBiz\Slim\Module\Auth\Controller\UsersController:register')->setName('auth_users_register');
+            //     $app->post('/register',
+            //         '\MartynBiz\Slim\Module\Auth\Controller\UsersController:post')->setName('auth_users_post');
+            //     $app->get('/resetpassword',
+            //         '\MartynBiz\Slim\Module\Auth\Controller\UsersController:resetpassword')->setName('auth_users_reset_password');
+            //     $app->post('/resetpassword',
+            //         '\MartynBiz\Slim\Module\Auth\Controller\UsersController:resetpassword')->setName('auth_users_reset_password_post');
+            // });
 
             // admin routes -- invokes auth middleware
             $app->group('/admin', function () {
