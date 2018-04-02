@@ -40,31 +40,6 @@ class User extends Model
         return $this->hasMany('App\\Model\\UserSetting'); //, 'user_id');
     }
 
-    public function transactions()
-    {
-        return $this->hasMany('App\\Model\\Transaction'); //, 'user_id');
-    }
-
-    public function tags()
-    {
-        return $this->hasMany('App\\Model\\Tag'); //, 'user_id');
-    }
-
-    public function funds()
-    {
-        return $this->hasMany('App\\Model\\Fund'); //, 'user_id');
-    }
-
-    public function categories()
-    {
-        return $this->hasMany('App\\Model\\Category'); //, 'user_id');
-    }
-
-    public function groups()
-    {
-        return $this->hasMany('App\\Model\\Group'); //, 'user_id');
-    }
-
     public function auth_tokens()
     {
         return $this->hasMany('App\\Model\\AuthToken'); //, 'user_id');
