@@ -9,7 +9,7 @@ return [
             ],
         ],
 
-        'auth' => [
+        'martynbiz-auth' => [
 
             'base_path' => '/auth',
 

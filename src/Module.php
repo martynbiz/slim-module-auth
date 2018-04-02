@@ -16,15 +16,12 @@ class Module implements ModuleInterface
      */
     public function initDependencies(Container $container)
     {
-        $settings = $container->get('settings');
-
-        // Models
         $container['martynbiz-auth.model.user'] = function ($c) {
             return new Auth\Model\User();
         };
 
         $container['martynbiz-auth.auth'] = function ($c) {
-            $settings = $c->get('settings')['auth'];
+            $settings = $c->get('settings')['martynbiz-auth'];
             $authAdapter = new Auth\Adapter\Eloquent( $c['martynbiz-auth.model.user'] );
             return new Auth\Auth($authAdapter, $settings);
         };
