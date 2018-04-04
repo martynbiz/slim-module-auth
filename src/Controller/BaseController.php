@@ -3,9 +3,9 @@ namespace MartynBiz\Slim\Module\Auth\Controller;
 
 use MartynBiz\Slim3Controller\Controller;
 use MartynBiz\Slim\Module\Auth\Exception\InvalidReturnToUrl;
-use MartynBiz\Slim\Module\Auth\Model\Account;
+use MartynBiz\Slim\Module\Core\Controller as CoreController;
 
-abstract class BaseController extends \MartynBiz\Slim\Module\Core\Controller\BaseController
+abstract class BaseController extends CoreController
 {
     /**
      * Will ensure that returnTo url is valid before doing redirect. Otherwise mean
@@ -26,20 +26,20 @@ abstract class BaseController extends \MartynBiz\Slim\Module\Core\Controller\Bas
         return $container->get('response')->withRedirect($returnTo);
     }
 
-    // /**
-    //  * Will do the Core render, but attach the currentUser
-    //  * @param string $file Name of the template/ view to render
-    //  * @param array $args Additional variables to pass to the view
-    //  * @param Response?
-    //  */
-    // public function render($file, $data=array())
-    // {
-    //     $container = $this->getContainer();
-    //
-    //     if ($container->has('auth')) {
-    //         $data['currentUser'] = $container->get('auth')->getCurrentUser();
-    //     }
-    //
-    //     return parent::render($file, $data);
-    // }
+    /**
+     * Will do the Core render, but attach the currentUser
+     * @param string $file Name of the template/ view to render
+     * @param array $args Additional variables to pass to the view
+     * @param Response?
+     */
+    public function render($file, $data=array())
+    {
+        $container = $this->getContainer();
+
+        if ($container->has('auth')) {
+            $data['currentUser'] = $container->get('auth')->getCurrentUser();
+        }
+
+        return parent::render($file, $data);
+    }
 }

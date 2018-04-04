@@ -48,7 +48,7 @@ class Module implements ModuleInterface
     public function initRoutes(App $app)
     {
         $container = $app->getContainer();
-        $settings = $container->get('settings')['auth'];
+        $settings = $container->get('settings')['martynbiz-auth'];
 
         $app->group($settings['base_path'], function () use ($app, $container) {
 
@@ -102,6 +102,12 @@ class Module implements ModuleInterface
         })
         ->add(new Auth\Middleware\RememberMe($container));
         // ->add(new Core\Middleware\Csrf($container));
+
+        // TODO move this somewhere else
+        $container = $app->getContainer();
+        $container['events']->registerEvent("core:rendering", function(&$file, &$data) use ($container) {
+            $data['current_user'] = $container['martynbiz-auth.auth']->getCurrentUser();
+        });
     }
 
     /**

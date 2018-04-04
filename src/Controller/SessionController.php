@@ -153,7 +153,7 @@ class SessionController extends BaseController
         // GET and POST
         $params = array_merge($request->getQueryParams(), $request->getParams());
         $container = $this->getContainer();
-        $settings = $container->get('settings')['auth'];
+        $settings = $container->get('settings')['martynbiz-auth'];
 
         // authentice with the email (might even be username, which is fine) and pw
         if ($container->get('martynbiz-auth.auth')->authenticate($params['email'], $params['password'])) {
