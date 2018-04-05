@@ -102,12 +102,6 @@ class Module implements ModuleInterface
         })
         ->add(new Auth\Middleware\RememberMe($container));
         // ->add(new Core\Middleware\Csrf($container));
-
-        // TODO move this somewhere else
-        $container = $app->getContainer();
-        $container['events']->registerEvent("core:rendering", function(&$file, &$data) use ($container) {
-            $data['current_user'] = $container['martynbiz-auth.auth']->getCurrentUser();
-        });
     }
 
     /**
