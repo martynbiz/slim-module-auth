@@ -102,6 +102,20 @@ class Module implements ModuleInterface
         })
         ->add(new Auth\Middleware\RememberMe($container));
         // ->add(new Core\Middleware\Csrf($container));
+
+
+
+
+        // TODO move this somewhere else? (postInit?)
+        $container->get('events')->register('martynbiz-core:tests:setup', function($app, $testCase) {
+
+            $container = $app->getContainer();
+
+            // auth service
+            $container['martynbiz-auth.auth'] = $testCase->getMockBuilder('MartynBiz\\Slim\\Module\\Auth\\Auth')
+                ->disableOriginalConstructor()
+                ->getMock();
+        });
     }
 
     /**
