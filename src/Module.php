@@ -126,10 +126,12 @@ class Module implements ModuleInterface
     public function copyFiles($dirs)
     {
         // copy module settings and template
-        $src = __DIR__ . '/../modules/*';
-        shell_exec("cp -rn $src {$dirs['modules_dir']}");
+        $src = __DIR__ . '/../files/modules/*';
+        shell_exec("cp -rn $src {$dirs['modules']}");
 
         // copy db migrations
+        $src = __DIR__ . '/../files/db/*';
+        shell_exec("cp -rn $src {$dirs['db']}");
     }
 
     /**
@@ -140,7 +142,7 @@ class Module implements ModuleInterface
     public function removeFiles($dirs)
     {
         // remove module settings and template
-        if ($path = realpath(" {$dirs['modules_dir']}/martynbiz-auth")) {
+        if ($path = realpath("{$dirs['modules']}/martynbiz-auth")) {
             shell_exec("rm -rf $path");
         }
 
