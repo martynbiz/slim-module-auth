@@ -5,7 +5,7 @@ return [
         // Renderer settings
         'renderer' => [
             'folders' => [
-                'martynbiz-auth' => APPLICATION_PATH . '/modules/martynbiz-auth/templates',
+                'martynbiz-auth' => APPLICATION_PATH . '/app/modules/martynbiz-auth/templates',
             ],
         ],
 
@@ -13,7 +13,7 @@ return [
 
             'base_path' => '/auth',
 
-            'redirect_after_register' => 'console_home',
+            // 'redirect_after_register' => 'console_home',
             'redirect_after_login' => 'console_home',
             'redirect_after_logout' => 'auth_session_login',
 
