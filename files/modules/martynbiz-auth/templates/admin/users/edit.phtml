@@ -37,6 +37,8 @@
 
         <input type="hidden" name="_METHOD" value="PUT">
 
+        <?= $this->insert('martynbiz-core::partials/csrf_fields.phtml') ?>
+
         <button type="submit" class="btn btn-primary"><?= $this->translate('save') ?></button>
         <a href="/admin/users" class="btn btn-default"><?= $this->translate('cancel') ?></a>
     </form>

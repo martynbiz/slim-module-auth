@@ -18,7 +18,7 @@
                             <input type="password" class="form-control" name="password_confirmation" placeholder="{{ translate('password_confirmation') }}">
                         </div>
 
-                        <input type="hidden" name="token" value="{{ $params['token'] }}">
+                        <?= $this->insert('martynbiz-core::partials/csrf_fields.phtml') ?>
 
                         <hr>
 

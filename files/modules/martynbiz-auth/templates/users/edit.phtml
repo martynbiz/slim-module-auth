@@ -15,7 +15,7 @@
                     <input type="text" name="language" placeholder="<?= $this->translate('language_label') ?>" value="<?= @$this->params['language'] ?>">
                 </label>
 
-                <input type="hidden" name="<?= $this->csrf_name ?>" value="<?= $this->csrf_value ?>">
+                <?= $this->insert('martynbiz-core::partials/csrf_fields.phtml') ?>
 
                 <input type="hidden" name="_METHOD" value="PUT"/>
 

@@ -13,6 +13,8 @@
 
                         <input type="text" class="more_info" name="more_info" value="" style="position: absolute; left: -9999px">
 
+                        <?= $this->insert('martynbiz-core::partials/csrf_fields.phtml') ?>
+
                         <hr>
 
                         <div>
