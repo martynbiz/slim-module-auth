@@ -89,6 +89,7 @@ class Module implements ModuleInterface
             ->add( new Auth\Middleware\RequireAuth($container) )
             ->add( new Auth\Middleware\RoleAccess($container, [ Auth\Model\User::ROLE_ADMIN ]) );
         })
+        ->add($container->get('csrf'))
         ->add(new Auth\Middleware\RememberMe($container));
     }
 

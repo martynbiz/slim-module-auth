@@ -183,7 +183,7 @@ class SessionController extends BaseController
             $container->get('flash')->addMessage('errors', array(
                 'Invalid username or password',
             ));
-            return $this->forward('index', $request, $response, $args);
+            return $this->index($request, $response, $args);
 
         }
     }
@@ -196,7 +196,7 @@ class SessionController extends BaseController
         // combine GET and POST params
         $params = array_merge($request->getQueryParams(), $request->getParams());
         $container = $this->getContainer();
-        $settings = $container->get('settings')['auth'];
+        $settings = $container->get('settings')['martynbiz-auth'];
 
         // // also, delete any auth_token we have for the account and cookie
         // $account = $this->getSessionAccount();
